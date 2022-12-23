@@ -50,4 +50,4 @@ const petSchema = new mongoose.Schema({
 
 const Pet = mongoose.model('Pet', petSchema);
 
-module.exports = Pet;
+exports.default = { Pet, petSchema };
