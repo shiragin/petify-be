@@ -1,23 +1,18 @@
-const express = require('express');
-const morgan = require('morgan');
-
+const mongoose = require('mongoose');
 require('dotenv').config();
+const app = require('./app');
 
-const userRoutes = require('./routes/userRoutes');
-const petRoutes = require('./routes/petRoutes');
+const DB = process.env.DATABASE.replace('PASSWORD', process.env.PASSWORD);
+mongoose
+  .connect(DB, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log('DB connection successful!');
+  });
 
-const port = process.env.PORT;
-const app = express();
-
-app.use(express.json());
-app.use(morgan('tiny'));
-app.use((req, res, next) => {
-  req.requestTime = new Date().toISOString();
-  next();
-});
-
-app.use('/users', userRoutes);
-app.use('/pets', petRoutes);
+const port = process.env.PORT || 8080;
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}...`);
