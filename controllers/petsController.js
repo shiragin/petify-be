@@ -6,7 +6,7 @@ async function getAllPets(req, res) {
     // EXECUTE QUERY
     const features = new APIFeatures(Pet.find(), req.query)
       .filter()
-      .sort()
+      // .sort()
       .limitFields()
       .paginate();
 

@@ -6,12 +6,20 @@ class APIFeatures {
 
   filter() {
     const queryObj = { ...this.queryString };
+    console.log(queryObj);
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach((el) => delete queryObj[el]);
 
     if (queryObj.name) {
-      // queryObj.name = { $regex: `${queryObj.name}` };
       queryObj.name = { $regex: queryObj.name, $options: 'i' };
+    }
+    if (queryObj.color) {
+      queryObj.color = { $regex: `${queryObj.color}` };
+    }
+    if (queryObj.size) {
+      if (queryObj.size === 'Big') queryObj.weight = { gte: 20 };
+      if (queryObj.size === 'Medium') queryObj.weight = { gte: 10, lt: 20 };
+      if (queryObj.size === 'Small') queryObj.weight = { lt: 10 };
     }
 
     console.log(queryObj);
