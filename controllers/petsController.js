@@ -1,8 +1,18 @@
 const Pet = require('../models/petsModel');
+const APIFeatures = require('../utils/apiFeatures');
 
 async function getAllPets(req, res) {
   try {
-    const pets = await Pet.find();
+    // EXECUTE QUERY
+    const features = new APIFeatures(Pet.find(), req.query)
+      .filter()
+      .sort()
+      .limitFields()
+      .paginate();
+
+    const pets = await features.query;
+
+    // SEND RESPONSE
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
