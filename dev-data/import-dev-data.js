@@ -1,7 +1,7 @@
 const fs = require('fs');
 const mongoose = require('mongoose');
 require('dotenv').config();
-const { Pet } = require('../models/petsModel');
+const Pet = require('../models/petsModel');
 
 const DB = process.env.DATABASE.replace('PASSWORD', process.env.PASSWORD);
 mongoose
@@ -32,6 +32,7 @@ async function importData() {
 // DELETE ALL DATA FROM DB
 
 async function deleteData() {
+  console.log(Pet);
   try {
     await Pet.deleteMany();
     console.log('Data successfully deleted!');

@@ -10,9 +10,11 @@ class APIFeatures {
     excludedFields.forEach((el) => delete queryObj[el]);
 
     if (queryObj.name) {
-      queryObj.name = { $regex: `${queryObj.name}` };
+      // queryObj.name = { $regex: `${queryObj.name}` };
+      queryObj.name = { $regex: queryObj.name, $options: 'i' };
     }
 
+    console.log(queryObj);
     let queryStr = JSON.stringify(queryObj);
 
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
