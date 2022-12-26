@@ -50,7 +50,7 @@ async function createPet(req, res) {
     res.status(201).json({
       status: 'success',
       data: {
-        tour: newPet,
+        pet: newPet,
       },
     });
   } catch (err) {
