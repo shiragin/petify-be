@@ -6,6 +6,7 @@ const userRoutes = require('./routes/userRoutes');
 const petRoutes = require('./routes/petRoutes');
 
 const app = express();
+app.use(express.static(`${__dirname}/public`));
 
 app.use(morgan('dev'));
 app.use(express.json());

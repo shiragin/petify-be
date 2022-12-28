@@ -1,0 +1,80 @@
+[
+  {
+    "type": "Cat",
+    "name": "Pitzi",
+    "adoptionStatus": "Adopted",
+    "picture": "",
+    "height": 8,
+    "weight": 4,
+    "color": "Black/White",
+    "bio": "Pitzi is a beautiful, elegant female cat. She's tiny, and she loves sleeping inside wardrobes and house plant pots (especially passion fruit). In her spare time she usually plots how to take over the world.",
+    "hypoallergnic": true,
+    "dietery": [],
+    "breed": "Domestic Shorthair Mix"
+  },
+  {
+    "type": "Dog",
+    "name": "Lisa",
+    "adoptionStatus": "Fostered",
+    "picture": "",
+    "height": 30,
+    "weight": 20,
+    "color": "Brown/Golden",
+    "bio": "Lisa is a gentle elderly female dog. She enjoys sleeping in her soft bed, grumbling and licking her owner's feet. She is extremely kind and is a good fit for an older couple.",
+    "hypoallergnic": true,
+    "dietery": ["Meat", "Asparagus"],
+    "breed": "Mixed Shiba Inu"
+  },
+  {
+    "type": "Cat",
+    "name": "Mulaf",
+    "adoptionStatus": "Available",
+    "picture": "",
+    "height": 10,
+    "weight": 8,
+    "color": "Grey Tabby",
+    "bio": "An awful cat. He will destroy your house, spill hte last of your wine and jump on your head when you're least expecting it. Adopt him today <3",
+    "hypoallergnic": false,
+    "dietery": ["Cabbage", "Lentils", "Houseplants"],
+    "breed": "Domestic Shorthair Mix"
+  },
+  {
+    "type": "Dog",
+    "name": "Martha",
+    "adoptionStatus": "Adopted",
+    "picture": "",
+    "height": 22,
+    "weight": 14,
+    "color": "Orange/White",
+    "bio": "An energetic, playful and loving dog. She loves ice cream and watermelon, going to long walks and playing outside. Martha is perfect for a family with young children.",
+    "hypoallergnic": true,
+    "dietery": ["Meatballs"],
+    "breed": "Tibetan Terrier Mix"
+  },
+  {
+    "type": "Cat",
+    "name": "Stina",
+    "adoptionStatus": "Fostered",
+    "picture": "",
+    "height": 9,
+    "weight": 5,
+    "color": "Calico: Orange/White/Black",
+    "bio": "Stina is so soft and perfect, you'd never noticed she's missing one leg. Her disability has never stopped her from playing, having fun and jumping whereever she wishes, and honestly it just makes her even cuter!",
+    "hypoallergnic": false,
+    "dietery": [],
+    "breed": "Domestic Longhair Mix"
+  },
+  {
+    "type": "Dog",
+    "name": "Schori",
+    "adoptionStatus": "Available",
+    "picture": "",
+    "height": 19,
+    "weight": 9,
+    "color": "Black",
+    "bio": "An elderly dog who likes sleeping, getting treats and being spoiled rotten! He can be wary of strangers, but once he's bitten your nose once, you know it's the beginning of a beautiful friendship.",
+    "hypoallergnic": true,
+    "dietery": ["Fish", "Seafood", "Cranberries"],
+    "breed": "German Pinscher Mix"
+  }
+]

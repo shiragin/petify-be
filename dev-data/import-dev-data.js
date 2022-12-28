@@ -15,7 +15,7 @@ mongoose
 
 // READ JSON FILE
 const pets = JSON.parse(
-  fs.readFileSync(`${__dirname}/pets-data.json`, 'utf-8')
+  fs.readFileSync(`${__dirname}/my-pets-data.json`, 'utf-8')
 );
 
 // IMPORT DATA INTO DB
