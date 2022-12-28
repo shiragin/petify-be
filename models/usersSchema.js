@@ -26,6 +26,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A user must have a password confirmation'],
   },
+  bio: {
+    type: String,
+  },
 });
 
 const User = mongoose.model('User', userSchema);

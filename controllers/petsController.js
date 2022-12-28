@@ -82,6 +82,7 @@ async function updatePet(req, res) {
     });
   }
 }
+
 async function deletePet(req, res) {
   try {
     await Pet.findByIdAndDelete(req.params.id);

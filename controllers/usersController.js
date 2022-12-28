@@ -46,4 +46,41 @@ async function createUser(req, res) {
   }
 }
 
-module.exports = { getAllUsers, createUser };
+async function getUser(req, res) {
+  try {
+    const user = await User.findById(req.params.id);
+    res.status(200).json({
+      status: 'success',
+      requestedAt: req.requestTime,
+      data: { user },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: `Invalid request`,
+      error: err.message || err.errmsg,
+    });
+  }
+}
+
+async function updateUser(req, res) {
+  try {
+    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    res.status(200).json({
+      status: 'success',
+      requestedAt: req.requestTime,
+      data: { user },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: `Invalid request`,
+      error: err.message || err.errmsg,
+    });
+  }
+}
+
+module.exports = { getAllUsers, createUser, updateUser, getUser };
