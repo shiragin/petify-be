@@ -1,4 +1,5 @@
 const Pet = require('../models/petsSchema');
+const User = require('../models/usersSchema');
 const APIFeatures = require('../utils/apiFeatures');
 
 async function getAllPets(req, res) {
@@ -126,6 +127,28 @@ async function getRandomPets(req, res) {
   }
 }
 
+async function getPetsByUser(req, res) {
+  try {
+    console.log(req.params.id);
+    const { savedPets } = await User.findById(req.params.id);
+    console.log(savedPets);
+    const pets = await Pet.find({ _id: { $in: savedPets } });
+    console.log(pets);
+    res.status(200).json({
+      status: 'success',
+      requestedAt: req.requestTime,
+      results: pets.length,
+      data: { pets },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: `Invalid request`,
+      error: err.message || err.errmsg,
+    });
+  }
+}
+
 module.exports = {
   getAllPets,
   createPet,
@@ -133,4 +156,5 @@ module.exports = {
   updatePet,
   deletePet,
   getRandomPets,
+  getPetsByUser,
 };
