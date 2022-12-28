@@ -1,4 +1,4 @@
-const Pet = require('../models/petsModel');
+const Pet = require('../models/petsSchema');
 const APIFeatures = require('../utils/apiFeatures');
 
 async function getAllPets(req, res) {
@@ -27,6 +27,7 @@ async function getAllPets(req, res) {
     });
   }
 }
+
 async function getPet(req, res) {
   try {
     const pet = await Pet.findById(req.params.id);
@@ -98,4 +99,37 @@ async function deletePet(req, res) {
   }
 }
 
-module.exports = { getAllPets, createPet, getPet, updatePet, deletePet };
+async function getRandomPets(req, res) {
+  try {
+    // const pets = await Pet.aggregate([{ $sample: { size: 4 } }]);
+
+    const pets = await Pet.aggregate([
+      {
+        $sample: { size: 4 },
+      },
+    ]);
+
+    // SEND RESPONSE
+    res.status(200).json({
+      status: 'success',
+      requestedAt: req.requestTime,
+      results: pets.length,
+      data: { pets },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: `Invalid request`,
+      error: err.message || err.errmsg,
+    });
+  }
+}
+
+module.exports = {
+  getAllPets,
+  createPet,
+  getPet,
+  updatePet,
+  deletePet,
+  getRandomPets,
+};

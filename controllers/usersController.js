@@ -1,4 +1,4 @@
-const User = require('../models/usersModel');
+const User = require('../models/usersSchema');
 const APIFeatures = require('../utils/apiFeatures');
 
 async function getAllUsers(req, res) {

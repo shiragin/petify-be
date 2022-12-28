@@ -1,7 +1,7 @@
 const fs = require('fs');
 const mongoose = require('mongoose');
 require('dotenv').config();
-const Pet = require('../models/petsModel');
+const Pet = require('../models/petsSchema');
 
 const DB = process.env.DATABASE.replace('PASSWORD', process.env.PASSWORD);
 mongoose
