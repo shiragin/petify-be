@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema({
   bio: {
     type: String,
   },
+  isAdmin: {
+    type: Boolean,
+    required: [true, 'A user must have an admin status specified'],
+    default: false,
+  },
   savedPets: {
     type: [String],
   },
