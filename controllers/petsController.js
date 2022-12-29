@@ -31,7 +31,8 @@ async function getAllPets(req, res) {
 
 async function getPet(req, res) {
   try {
-    const pet = await Pet.findById(req.params.id);
+    const params = req.params.id.split(',');
+    const pet = await Pet.find({ _id: { $in: params } });
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
@@ -129,16 +130,17 @@ async function getRandomPets(req, res) {
 
 async function getPetsByUser(req, res) {
   try {
-    console.log(req.params.id);
-    const { savedPets } = await User.findById(req.params.id);
-    console.log(savedPets);
-    const pets = await Pet.find({ _id: { $in: savedPets } });
-    console.log(pets);
+    const { savedPets, fosteredPets, adoptedPets } = await User.findById(
+      req.params.id
+    );
+    const ownedPets = [...fosteredPets, ...adoptedPets];
+    const savedPetsList = await Pet.find({ _id: { $in: savedPets } });
+    const ownedPetsList = await Pet.find({ _id: { $in: ownedPets } });
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
-      results: pets.length,
-      data: { pets },
+      results: savedPetsList.length + ownedPetsList.length,
+      data: { savedPets: savedPetsList, ownedPets: ownedPetsList },
     });
   } catch (err) {
     res.status(400).json({

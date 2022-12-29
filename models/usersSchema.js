@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     unique: [true, 'Email already existed'],
   },
   phoneNumber: {
-    type: Number,
+    type: String,
     required: [true, 'A user must have a phone number'],
   },
   password: {
@@ -30,6 +30,12 @@ const userSchema = new mongoose.Schema({
     type: String,
   },
   savedPets: {
+    type: [String],
+  },
+  adoptedPets: {
+    type: [String],
+  },
+  fosteredPets: {
     type: [String],
   },
 });
