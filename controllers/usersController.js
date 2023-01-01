@@ -1,3 +1,4 @@
+// const jwt = require('jsonwebtoken');
 const User = require('../models/usersSchema');
 const APIFeatures = require('../utils/apiFeatures');
 const { getAllUsersData } = require('../models/usersSchema');
@@ -50,11 +51,11 @@ async function createUser(req, res) {
 
 async function getUserByEmail(req, res) {
   try {
-    const { user } = res.locals;
+    const { user, token } = req.body;
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
-      data: { user },
+      data: { token, user },
     });
   } catch (err) {
     res.status(400).json({
@@ -89,13 +90,13 @@ async function updateUser(req, res) {
       runValidators: true,
     });
     res.status(200).json({
-      status: 'success',
+      ok: true,
       requestedAt: req.requestTime,
       data: { user },
     });
   } catch (err) {
     res.status(400).json({
-      status: 'fail',
+      ok: false,
       message: `Invalid request`,
       error: err.message || err.errmsg,
     });
