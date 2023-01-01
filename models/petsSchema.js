@@ -10,12 +10,13 @@ const petSchema = new mongoose.Schema({
     required: [true, 'A pet must have a name'],
     unique: false,
   },
+  picture: {
+    type: String,
+    required: [true, 'A pet must have am image'],
+  },
   adoptionStatus: {
     type: String,
     required: [true, 'A pet must have a status'],
-  },
-  picture: {
-    type: String,
   },
   height: {
     type: Number,
@@ -25,15 +26,15 @@ const petSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'A pet must have a weight'],
   },
-  color: {
-    type: String,
+  colour: {
+    type: [String],
     required: [true, 'A pet must have a colour'],
   },
   bio: {
     type: String,
     trim: true,
   },
-  hypoallergnic: {
+  hypoallergenic: {
     type: Boolean,
     required: [true, 'A pet must have a hypoallergenic spec'],
   },

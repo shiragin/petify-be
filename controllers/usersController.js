@@ -1,5 +1,6 @@
 const User = require('../models/usersSchema');
 const APIFeatures = require('../utils/apiFeatures');
+const { getAllUsersData } = require('../models/usersSchema');
 
 async function getAllUsers(req, res) {
   try {
@@ -10,7 +11,8 @@ async function getAllUsers(req, res) {
       .limitFields()
       .paginate();
 
-    const users = await features.query;
+    // Call modal
+    const users = await getAllUsersData(features.query);
 
     // SEND RESPONSE
     res.status(200).json({
@@ -36,6 +38,23 @@ async function createUser(req, res) {
       data: {
         user: newUser,
       },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'fail',
+      message: `Invalid request`,
+      error: err.message || err.errmsg,
+    });
+  }
+}
+
+async function getUserByEmail(req, res) {
+  try {
+    const { user } = res.locals;
+    res.status(200).json({
+      status: 'success',
+      requestedAt: req.requestTime,
+      data: { user },
     });
   } catch (err) {
     res.status(400).json({
@@ -83,4 +102,10 @@ async function updateUser(req, res) {
   }
 }
 
-module.exports = { getAllUsers, createUser, updateUser, getUser };
+module.exports = {
+  getAllUsers,
+  createUser,
+  updateUser,
+  getUser,
+  getUserByEmail,
+};

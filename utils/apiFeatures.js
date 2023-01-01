@@ -13,8 +13,8 @@ class APIFeatures {
     if (queryObj.name) {
       queryObj.name = { $regex: queryObj.name, $options: 'i' };
     }
-    if (queryObj.color) {
-      queryObj.color = { $regex: `${queryObj.color}` };
+    if (queryObj.colour) {
+      queryObj.colour = { $regex: `${queryObj.colour}` };
     }
     if (queryObj.size) {
       if (queryObj.size === 'Big') queryObj.weight = { gte: 20 };

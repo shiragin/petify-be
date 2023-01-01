@@ -2,8 +2,8 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 
-const userRoutes = require('./routes/userRoutes');
-const petRoutes = require('./routes/petRoutes');
+const usersRoute = require('./routes/usersRoute');
+const petsRoute = require('./routes/petsRoute');
 
 const app = express();
 app.use(express.static(`${__dirname}/public`));
@@ -16,7 +16,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/users', userRoutes);
-app.use('/pets', petRoutes);
+app.use('/users', usersRoute);
+app.use('/pets', petsRoute);
 
 module.exports = app;

@@ -8,15 +8,10 @@ const {
   getRandomPets,
   getPetsByUser,
 } = require('../controllers/petsController');
-// const validatePet = require('../middleware/validatePet');
-// const { petSchema } = require('../middleware/petSchema');
 
 const router = express.Router();
 
-router.route('/').get(getAllPets).post(
-  // validatePet(petSchema),
-  createPet
-);
+router.route('/').get(getAllPets).post(createPet);
 
 router.route('/random').get(getRandomPets);
 

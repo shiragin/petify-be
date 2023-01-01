@@ -108,6 +108,9 @@ async function getRandomPets(req, res) {
 
     const pets = await Pet.aggregate([
       {
+        $match: { adoptionStatus: 'Available' },
+      },
+      {
         $sample: { size: 4 },
       },
     ]);
