@@ -1,7 +1,7 @@
 // const jwt = require('jsonwebtoken');
-const User = require('../models/usersSchema');
+const User = require('../schemas/usersSchema');
 const APIFeatures = require('../utils/apiFeatures');
-const { getAllUsersData } = require('../models/usersSchema');
+const { getAllUsersData, getUserDataById } = require('../models/usersModel');
 
 async function getAllUsers(req, res) {
   try {
@@ -51,11 +51,11 @@ async function createUser(req, res) {
 
 async function getUserByEmail(req, res) {
   try {
-    const { user, token } = req.body;
+    const { user, token, exp } = req.body;
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
-      data: { token, user },
+      data: { token, user, exp },
     });
   } catch (err) {
     res.status(400).json({
@@ -68,7 +68,8 @@ async function getUserByEmail(req, res) {
 
 async function getUser(req, res) {
   try {
-    const user = await User.findById(req.params.id);
+    // const user = await User.findById(req.params.id);
+    const user = await getUserDataById(req.params.id);
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,

@@ -1,6 +1,14 @@
-const Pet = require('../models/petsSchema');
-const User = require('../models/usersSchema');
+const Pet = require('../schemas/petsSchema');
 const APIFeatures = require('../utils/apiFeatures');
+const {
+  getAllPetsData,
+  getPetData,
+  createPetData,
+  updatePetData,
+  deletePetData,
+  getRandomPetsData,
+} = require('../models/petsModel');
+const { getUserDataById } = require('../models/usersModel');
 
 async function getAllPets(req, res) {
   try {
@@ -11,7 +19,8 @@ async function getAllPets(req, res) {
       .limitFields()
       .paginate();
 
-    const pets = await features.query;
+    const pets = await getAllPetsData(features.query);
+    console.log(pets);
 
     // SEND RESPONSE
     res.status(200).json({
@@ -32,7 +41,7 @@ async function getAllPets(req, res) {
 async function getPet(req, res) {
   try {
     const params = req.params.id.split(',');
-    const pet = await Pet.find({ _id: { $in: params } });
+    const pet = await getPetData(params);
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
@@ -49,7 +58,7 @@ async function getPet(req, res) {
 
 async function createPet(req, res) {
   try {
-    const newPet = await Pet.create(req.body);
+    const newPet = await createPetData(req.body);
     res.status(201).json({
       status: 'success',
       data: {
@@ -67,10 +76,7 @@ async function createPet(req, res) {
 
 async function updatePet(req, res) {
   try {
-    const pet = await Pet.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const pet = await updatePetData(req.params.id, req.body);
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
@@ -87,7 +93,8 @@ async function updatePet(req, res) {
 
 async function deletePet(req, res) {
   try {
-    await Pet.findByIdAndDelete(req.params.id);
+    await deletePetData(req.params.id);
+    console.log(res);
     res.status(204).json({
       status: 'success',
       requestedAt: req.requestTime,
@@ -104,18 +111,8 @@ async function deletePet(req, res) {
 
 async function getRandomPets(req, res) {
   try {
-    // const pets = await Pet.aggregate([{ $sample: { size: 4 } }]);
-
-    const pets = await Pet.aggregate([
-      {
-        $match: { adoptionStatus: 'Available' },
-      },
-      {
-        $sample: { size: 4 },
-      },
-    ]);
-
-    // SEND RESPONSE
+    const pets = await getRandomPetsData();
+    console.log('PETS', pets);
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
@@ -133,12 +130,12 @@ async function getRandomPets(req, res) {
 
 async function getPetsByUser(req, res) {
   try {
-    const { savedPets, fosteredPets, adoptedPets } = await User.findById(
+    const { savedPets, fosteredPets, adoptedPets } = await getUserDataById(
       req.params.id
     );
     const ownedPets = [...fosteredPets, ...adoptedPets];
-    const savedPetsList = await Pet.find({ _id: { $in: savedPets } });
-    const ownedPetsList = await Pet.find({ _id: { $in: ownedPets } });
+    const savedPetsList = await getPetData(savedPets);
+    const ownedPetsList = await getPetData(ownedPets);
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,

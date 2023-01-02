@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { getAllUsersData } = require('../models/usersModels');
+const { getAllUsersData } = require('../models/usersModel');
 
 function checkPasswordsMatch(req, res, next) {
   const { password, passwordConfirm } = req.body;
@@ -65,7 +65,10 @@ async function checkPassword(req, res, next) {
         expiresIn: '1h',
       });
       console.log('TOKEN', token);
+      const { exp } = jwt.decode(token);
+      console.log('EXP', exp);
       req.body.token = token;
+      req.body.exp = exp * 1000;
       next();
     });
   } catch (err) {
