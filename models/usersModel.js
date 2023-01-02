@@ -17,4 +17,30 @@ async function getUserDataById(id) {
   }
 }
 
-module.exports = { getAllUsersData, getUserDataById };
+async function createUserData(body) {
+  try {
+    const newUser = await User.create(body);
+    return newUser;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function updateUserData(id, body) {
+  try {
+    const newUser = await User.findByIdAndUpdate(id, body, {
+      new: true,
+      runValidators: true,
+    });
+    return newUser;
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+module.exports = {
+  getAllUsersData,
+  getUserDataById,
+  createUserData,
+  updateUserData,
+};

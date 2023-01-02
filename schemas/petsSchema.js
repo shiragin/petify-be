@@ -47,6 +47,9 @@ const petSchema = new mongoose.Schema({
     type: Date,
     default: Date.now(),
   },
+  owner: {
+    type: String,
+  },
 });
 
 const Pet = mongoose.model('Pet', petSchema);

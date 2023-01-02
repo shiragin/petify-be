@@ -1,7 +1,12 @@
 // const jwt = require('jsonwebtoken');
 const User = require('../schemas/usersSchema');
 const APIFeatures = require('../utils/apiFeatures');
-const { getAllUsersData, getUserDataById } = require('../models/usersModel');
+const {
+  getAllUsersData,
+  getUserDataById,
+  createUserData,
+  updateUserData,
+} = require('../models/usersModel');
 
 async function getAllUsers(req, res) {
   try {
@@ -31,14 +36,13 @@ async function getAllUsers(req, res) {
   }
 }
 
-async function createUser(req, res) {
+async function getUser(req, res) {
   try {
-    const newUser = await User.create(req.body);
-    res.status(201).json({
+    const user = await getUserDataById(req.params.id);
+    res.status(200).json({
       status: 'success',
-      data: {
-        user: newUser,
-      },
+      requestedAt: req.requestTime,
+      data: { user },
     });
   } catch (err) {
     res.status(400).json({
@@ -66,14 +70,14 @@ async function getUserByEmail(req, res) {
   }
 }
 
-async function getUser(req, res) {
+async function createUser(req, res) {
   try {
-    // const user = await User.findById(req.params.id);
-    const user = await getUserDataById(req.params.id);
-    res.status(200).json({
+    const newUser = await createUserData(req.body);
+    res.status(201).json({
       status: 'success',
-      requestedAt: req.requestTime,
-      data: { user },
+      data: {
+        user: newUser,
+      },
     });
   } catch (err) {
     res.status(400).json({
@@ -86,10 +90,7 @@ async function getUser(req, res) {
 
 async function updateUser(req, res) {
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true,
-    });
+    const user = await updateUserData(req.params.id, req.body);
     res.status(200).json({
       ok: true,
       requestedAt: req.requestTime,

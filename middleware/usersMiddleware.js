@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const { getAllUsersData } = require('../models/usersModel');
 
 function checkPasswordsMatch(req, res, next) {
+  console.log(req.body);
   const { password, passwordConfirm } = req.body;
   if (password !== passwordConfirm) {
     res.status(400).send(`Error signing up: Passwords don't match`);
@@ -49,8 +50,10 @@ async function checkUserExists(req, res, next) {
 }
 
 async function checkPassword(req, res, next) {
+  console.log(req);
   const { password, user } = req.body;
   console.log('ok');
+  console.log(password, user);
   try {
     bcrypt.compare(password, user.password, (err, result) => {
       if (err) {
@@ -89,7 +92,7 @@ async function auth(req, res, next) {
       return;
     }
     if (decoded) {
-      console.log(decoded);
+      console.log('DECODED', decoded);
       req.body.userId = decoded.id;
       next();
     }
