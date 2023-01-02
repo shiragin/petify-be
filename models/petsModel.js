@@ -28,7 +28,6 @@ async function getRandomPetsData() {
         $sample: { size: 4 },
       },
     ]);
-    // console.log(petsList);
     return petsList;
   } catch (err) {
     console.error(err);

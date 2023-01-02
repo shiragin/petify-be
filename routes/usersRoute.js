@@ -26,6 +26,9 @@ router
 
 router.route('/login').post(checkUserExists, checkPassword, getUserByEmail);
 
-router.route('/:id').get(getUser).patch(auth, updateUser);
+router
+  .route('/:id')
+  .get(getUser)
+  .patch(auth, checkPasswordsMatch, hashPassword, updateUser);
 
 module.exports = router;

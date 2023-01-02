@@ -6,7 +6,6 @@ class APIFeatures {
 
   filter() {
     const queryObj = { ...this.queryString };
-    console.log(queryObj);
     const excludedFields = ['page', 'sort', 'limit', 'fields'];
     excludedFields.forEach((el) => delete queryObj[el]);
 
@@ -22,7 +21,6 @@ class APIFeatures {
       if (queryObj.size === 'Small') queryObj.weight = { lt: 10 };
     }
 
-    console.log(queryObj);
     let queryStr = JSON.stringify(queryObj);
 
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);

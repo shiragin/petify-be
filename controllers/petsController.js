@@ -20,7 +20,6 @@ async function getAllPets(req, res) {
       .paginate();
 
     const pets = await getAllPetsData(features.query);
-    console.log(pets);
 
     // SEND RESPONSE
     res.status(200).json({
@@ -94,7 +93,6 @@ async function updatePet(req, res) {
 async function deletePet(req, res) {
   try {
     await deletePetData(req.params.id);
-    console.log(res);
     res.status(204).json({
       status: 'success',
       requestedAt: req.requestTime,
@@ -112,7 +110,6 @@ async function deletePet(req, res) {
 async function getRandomPets(req, res) {
   try {
     const pets = await getRandomPetsData();
-    console.log('PETS', pets);
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,

@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const { getAllUsersData } = require('../models/usersModel');
 
 function checkPasswordsMatch(req, res, next) {
-  console.log(req.body);
   const { password, passwordConfirm } = req.body;
   if (password !== passwordConfirm) {
     res.status(400).send(`Error signing up: Passwords don't match`);
@@ -44,16 +43,12 @@ async function checkUserExists(req, res, next) {
       .send(`Error signing up: User ${req.body.email} doesn't exists`);
     return;
   }
-  console.log(user[0]);
   req.body.user = user[0];
   next();
 }
 
 async function checkPassword(req, res, next) {
-  console.log(req);
   const { password, user } = req.body;
-  console.log('ok');
-  console.log(password, user);
   try {
     bcrypt.compare(password, user.password, (err, result) => {
       if (err) {
@@ -65,11 +60,9 @@ async function checkPassword(req, res, next) {
         return;
       }
       const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
-        expiresIn: '1h',
+        expiresIn: '2h',
       });
-      console.log('TOKEN', token);
       const { exp } = jwt.decode(token);
-      console.log('EXP', exp);
       req.body.token = token;
       req.body.exp = exp * 1000;
       next();
@@ -80,7 +73,6 @@ async function checkPassword(req, res, next) {
 }
 
 async function auth(req, res, next) {
-  console.log(req.headers.authorization);
   if (!req.headers.authorization) {
     res.status(401).send('Authorization headers required');
     return;
@@ -92,7 +84,6 @@ async function auth(req, res, next) {
       return;
     }
     if (decoded) {
-      console.log('DECODED', decoded);
       req.body.userId = decoded.id;
       next();
     }
