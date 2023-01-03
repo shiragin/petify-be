@@ -75,15 +75,18 @@ async function createPet(req, res) {
 
 async function updatePet(req, res) {
   try {
+    if (req.body.colour) req.body.colour = req.body.colour.split(',');
+    if (req.body.dietry) req.body.dietry = req.body.dietry.split(',');
+    console.log(req.body);
     const pet = await updatePetData(req.params.id, req.body);
     res.status(200).json({
-      status: 'success',
+      ok: true,
       requestedAt: req.requestTime,
       data: { pet },
     });
   } catch (err) {
     res.status(400).json({
-      status: 'fail',
+      ok: false,
       message: `Invalid request`,
       error: err.message || err.errmsg,
     });

@@ -25,6 +25,10 @@ router.route('/random').get(getRandomPets);
 
 router.route('/user/:id').get(auth, getPetsByUser);
 
-router.route('/:id').get(getPet).patch(auth, updatePet).delete(auth, deletePet);
+router
+  .route('/:id')
+  .get(getPet)
+  .patch(auth, upload.single('picture'), getPictureUrl, updatePet)
+  .delete(auth, deletePet);
 
 module.exports = router;

@@ -63,6 +63,7 @@ async function checkPassword(req, res, next) {
         expiresIn: '2h',
       });
       const { exp } = jwt.decode(token);
+      // res.cookie('token, token, {httpOnly: true}');
       req.body.token = token;
       req.body.exp = exp * 1000;
       next();
