@@ -8,12 +8,14 @@ async function getAllUsersData(query) {
     console.error(err);
   }
 }
-async function getUserDataById(id) {
+async function getUserDataById(id, next) {
   try {
     const usersList = await User.findById(id);
     return usersList;
   } catch (err) {
     console.error(err);
+    err.statusCode = 500;
+    next(err);
   }
 }
 
@@ -37,10 +39,28 @@ async function updateUserData(id, body) {
     console.error(err);
   }
 }
+async function editSavedPetsData(id, body) {
+  console.log('BODY', body);
+  try {
+    const newUser = await User.findByIdAndUpdate(
+      id,
+      { $set: { savedPets: body } },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    console.log('NEWUSER', newUser.savedPets);
+    return newUser;
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 module.exports = {
   getAllUsersData,
   getUserDataById,
   createUserData,
   updateUserData,
+  editSavedPetsData,
 };

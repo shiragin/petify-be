@@ -6,6 +6,7 @@ const {
   getUserDataById,
   createUserData,
   updateUserData,
+  editSavedPetsData,
 } = require('../models/usersModel');
 
 async function getAllUsers(req, res) {
@@ -19,24 +20,26 @@ async function getAllUsers(req, res) {
 
     // Call modal
     const users = await getAllUsersData(features.query);
+    console.log(users);
+    console.log(typeof users);
 
     // SEND RESPONSE
     res.status(200).json({
-      status: 'success',
+      ok: true,
       requestedAt: req.requestTime,
       results: users.length,
       data: { users },
     });
   } catch (err) {
     res.status(400).json({
-      status: 'fail',
+      ok: false,
       message: `Invalid request`,
       error: err.message || err.errmsg,
     });
   }
 }
 
-async function getUser(req, res) {
+async function getUser(req, res, next) {
   try {
     const user = await getUserDataById(req.params.id);
     res.status(200).json({
@@ -90,7 +93,24 @@ async function createUser(req, res) {
 
 async function updateUser(req, res) {
   try {
-    const user = await updateUserData(req.params.id, req.body);
+    const user = await updateUserData(req.params.id, req.body.user);
+    res.status(200).json({
+      ok: true,
+      requestedAt: req.requestTime,
+      data: { user },
+    });
+  } catch (err) {
+    res.status(400).json({
+      ok: false,
+      message: `Invalid request`,
+      error: err.message || err.errmsg,
+    });
+  }
+}
+
+async function editSavedPets(req, res) {
+  try {
+    const user = await editSavedPetsData(req.params.id, req.body.savedPets);
     res.status(200).json({
       ok: true,
       requestedAt: req.requestTime,
@@ -111,4 +131,5 @@ module.exports = {
   updateUser,
   getUser,
   getUserByEmail,
+  editSavedPets,
 };

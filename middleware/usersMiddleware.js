@@ -5,7 +5,10 @@ const { getAllUsersData } = require('../models/usersModel');
 function checkPasswordsMatch(req, res, next) {
   const { password, passwordConfirm } = req.body;
   if (password !== passwordConfirm) {
-    res.status(400).send(`Error signing up: Passwords don't match`);
+    // res.status(400).send(`Error signing up: Passwords don't match`);
+    const err = new Error(`Error signing up: Passwords don't match`);
+    err.statusCode = 400;
+    next(err);
     return;
   }
   next();
@@ -74,6 +77,10 @@ async function checkPassword(req, res, next) {
 }
 
 async function auth(req, res, next) {
+  console.log('hi');
+  console.log(req.params.id);
+  console.log(req.body);
+  console.log(req.headers);
   if (!req.headers.authorization) {
     res.status(401).send('Authorization headers required');
     return;
@@ -81,11 +88,13 @@ async function auth(req, res, next) {
   const token = req.headers.authorization.replace('Bearer ', '');
   jwt.verify(token, process.env.TOKEN_SECRET, (err, decoded) => {
     if (err) {
+      console.log(err);
       res.status(401).send('Unauthorized');
       return;
     }
     if (decoded) {
       req.body.userId = decoded.id;
+      console.log(req.body);
       next();
     }
   });

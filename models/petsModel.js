@@ -9,12 +9,14 @@ async function getAllPetsData(query) {
   }
 }
 
-async function getPetData(params) {
+async function getPetData(params, next) {
   try {
     const petsList = Pet.find({ _id: { $in: params } });
     return petsList;
   } catch (err) {
     console.error(err);
+    err.statusCode = 500;
+    next(err);
   }
 }
 

@@ -10,6 +10,8 @@ const {
   getPetsByUser,
 } = require('../controllers/petsController');
 
+const { editSavedPets } = require('../controllers/usersController');
+
 const { auth } = require('../middleware/usersMiddleware');
 
 const { getPictureUrl, upload } = require('../middleware/petsMiddleware');
@@ -30,5 +32,7 @@ router
   .get(getPet)
   .patch(auth, upload.single('picture'), getPictureUrl, updatePet)
   .delete(auth, deletePet);
+
+router.route('/:id/save').post(auth, editSavedPets).delete(auth, editSavedPets);
 
 module.exports = router;

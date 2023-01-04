@@ -37,7 +37,7 @@ async function getAllPets(req, res) {
   }
 }
 
-async function getPet(req, res) {
+async function getPet(req, res, next) {
   try {
     const params = req.params.id.split(',');
     const pet = await getPetData(params);
@@ -133,14 +133,20 @@ async function getPetsByUser(req, res) {
     const { savedPets, fosteredPets, adoptedPets } = await getUserDataById(
       req.params.id
     );
-    const ownedPets = [...fosteredPets, ...adoptedPets];
+    // const ownedPets = [...fosteredPets, ...adoptedPets];
     const savedPetsList = await getPetData(savedPets);
-    const ownedPetsList = await getPetData(ownedPets);
+    const fosteredPetsList = await getPetData(fosteredPets);
+    const adoptedPetsList = await getPetData(adoptedPets);
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
-      results: savedPetsList.length + ownedPetsList.length,
-      data: { savedPets: savedPetsList, ownedPets: ownedPetsList },
+      results:
+        savedPetsList.length + fosteredPetsList.length + adoptedPetsList.length,
+      data: {
+        savedPets: savedPetsList,
+        fosteredPets: fosteredPetsList,
+        adoptedPets: adoptedPetsList,
+      },
     });
   } catch (err) {
     res.status(400).json({

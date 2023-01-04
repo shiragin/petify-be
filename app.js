@@ -19,4 +19,15 @@ app.use((req, res, next) => {
 app.use('/users', usersRoute);
 app.use('/pets', petsRoute);
 
+// Not existant routes
+app.use('*', (req, res) => {
+  res.status(404).send({ message: 'Oops, page not found' });
+});
+
+// Global error middleware
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(err.statusCode).send(err.message);
+});
+
 module.exports = app;
