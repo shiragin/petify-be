@@ -40,17 +40,15 @@ async function updateUserData(id, body) {
   }
 }
 async function editSavedPetsData(id, body) {
-  console.log('BODY', body);
   try {
     const newUser = await User.findByIdAndUpdate(
       id,
-      { $set: { savedPets: body } },
+      { $set: body },
       {
         new: true,
         runValidators: true,
       }
     );
-    console.log('NEWUSER', newUser.savedPets);
     return newUser;
   } catch (err) {
     console.error(err);

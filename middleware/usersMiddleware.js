@@ -66,7 +66,6 @@ async function checkPassword(req, res, next) {
         expiresIn: '2h',
       });
       const { exp } = jwt.decode(token);
-      // res.cookie('token, token, {httpOnly: true}');
       req.body.token = token;
       req.body.exp = exp * 1000;
       next();
@@ -77,10 +76,6 @@ async function checkPassword(req, res, next) {
 }
 
 async function auth(req, res, next) {
-  console.log('hi');
-  console.log(req.params.id);
-  console.log(req.body);
-  console.log(req.headers);
   if (!req.headers.authorization) {
     res.status(401).send('Authorization headers required');
     return;

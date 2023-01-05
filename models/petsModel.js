@@ -46,11 +46,13 @@ async function createPetData(body) {
 }
 
 async function updatePetData(id, body) {
+  console.log('PET', id, body);
   try {
     const updatedPet = await Pet.findByIdAndUpdate(id, body, {
       new: true,
       runValidators: true,
     });
+    console.log(updatedPet);
     return updatedPet;
   } catch (err) {
     console.error(err);

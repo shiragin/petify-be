@@ -8,6 +8,8 @@ const {
   updateUserData,
   editSavedPetsData,
 } = require('../models/usersModel');
+// const { updatePet } = require('./petsController');
+const { updatePetData } = require('../models/petsModel');
 
 async function getAllUsers(req, res) {
   try {
@@ -110,11 +112,34 @@ async function updateUser(req, res) {
 
 async function editSavedPets(req, res) {
   try {
-    const user = await editSavedPetsData(req.params.id, req.body.savedPets);
+    const user = await editSavedPetsData(req.params.id, {
+      savedPets: req.body.savedPets,
+    });
     res.status(200).json({
       ok: true,
       requestedAt: req.requestTime,
       data: { user },
+    });
+  } catch (err) {
+    res.status(400).json({
+      ok: false,
+      message: `Invalid request`,
+      error: err.message || err.errmsg,
+    });
+  }
+}
+
+async function editOwnedPets(req, res) {
+  try {
+    const user = await editSavedPetsData(req.params.id, {
+      adoptedPets: req.body.adoptedPets,
+      fosteredPets: req.body.fosteredPets,
+    });
+    const pet = await updatePetData(req.body.petId, req.body.pet);
+    res.status(200).json({
+      ok: true,
+      requestedAt: req.requestTime,
+      data: { user, pet },
     });
   } catch (err) {
     res.status(400).json({
@@ -132,4 +157,5 @@ module.exports = {
   getUser,
   getUserByEmail,
   editSavedPets,
+  editOwnedPets,
 };

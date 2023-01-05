@@ -10,7 +10,11 @@ const {
   getPetsByUser,
 } = require('../controllers/petsController');
 
-const { editSavedPets } = require('../controllers/usersController');
+const {
+  editSavedPets,
+  editOwnedPets,
+  // returnOwnedPets,
+} = require('../controllers/usersController');
 
 const { auth } = require('../middleware/usersMiddleware');
 
@@ -34,5 +38,9 @@ router
   .delete(auth, deletePet);
 
 router.route('/:id/save').post(auth, editSavedPets).delete(auth, editSavedPets);
+
+router.route('/:id/adopt').post(auth, editOwnedPets);
+
+// router.route('/:id/return').post(auth, returnOwnedPets);
 
 module.exports = router;
