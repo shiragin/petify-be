@@ -1,4 +1,5 @@
 const Pet = require('../schemas/petsSchema');
+// const AppError = require('../utils/appError');
 
 async function getAllPetsData(query) {
   try {
@@ -36,27 +37,19 @@ async function getRandomPetsData() {
   }
 }
 
-async function createPetData(body) {
+function createPetData(body) {
   try {
-    const newPet = await Pet.create(body);
-    return newPet;
+    return Pet.create(body);
   } catch (err) {
     console.error(err);
   }
 }
 
-async function updatePetData(id, body) {
-  console.log('PET', id, body);
-  try {
-    const updatedPet = await Pet.findByIdAndUpdate(id, body, {
-      new: true,
-      runValidators: true,
-    });
-    console.log(updatedPet);
-    return updatedPet;
-  } catch (err) {
-    console.error(err);
-  }
+function updatePetData(id, body) {
+  return Pet.findByIdAndUpdate(id, body, {
+    new: true,
+    runValidators: true,
+  });
 }
 
 async function deletePetData(id) {
