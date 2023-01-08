@@ -14,6 +14,8 @@ const {
   checkUserExists,
   checkPassword,
   auth,
+  checkOldPassword,
+  checkUpdatedPassword,
 } = require('../middleware/usersMiddleware');
 
 const router = express.Router();
@@ -29,6 +31,6 @@ router.route('/login').post(checkUserExists, checkPassword, getUserByEmail);
 router
   .route('/:id')
   .get(getUser)
-  .patch(auth, checkPasswordsMatch, hashPassword, updateUser);
+  .put(auth, checkOldPassword, checkUpdatedPassword, updateUser);
 
 module.exports = router;

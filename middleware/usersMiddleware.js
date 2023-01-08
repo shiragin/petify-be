@@ -1,15 +1,12 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { getAllUsersData } = require('../models/usersModel');
+const { getAllUsersData, getUserDataById } = require('../models/usersModel');
 const AppError = require('../utils/appError');
 
 function checkPasswordsMatch(req, res, next) {
   const { password, passwordConfirm } = req.body;
+  console.log(password, passwordConfirm);
   if (password !== passwordConfirm) {
-    // res.status(400).send(`Error signing up: Passwords don't match`);
-    // const err = new Error(`Error signing up: Passwords don't match`);
-    // err.statusCode = 400;
-    // next(err);
     next(new AppError(`Error signing up: Passwords don't match`, 400));
     return;
   }
@@ -19,9 +16,6 @@ function checkPasswordsMatch(req, res, next) {
 async function checkNewUser(req, res, next) {
   const user = await getAllUsersData({ email: req.body.email });
   if (user.length !== 0) {
-    // res
-    //   .status(400)
-    //   .send(`Error signing up: User ${req.body.email} already exists`);
     next(
       new AppError(
         `Error signing up: User ${req.body.email} already exists`,
@@ -65,17 +59,29 @@ async function checkUserExists(req, res, next) {
   next();
 }
 
+async function checkOldPassword(req, res, next) {
+  const user = await getUserDataById({ _id: req.body._id });
+  const { password } = req.body;
+  if (user.password === password) next();
+  else {
+    next(
+      new AppError(
+        `Error logging in: Incorrect passowrd. Please try again.`,
+        500
+      )
+    );
+  }
+}
+
 async function checkPassword(req, res, next) {
   const { password, user } = req.body;
   try {
     bcrypt.compare(password, user.password, (err, result) => {
       if (err) {
-        // res.status(500).send(`Error logging in: ${err}`);
         next(new AppError(`Error logging in: ${err}`, 500));
         return;
       }
       if (!result) {
-        // res.status(400).send(`Error logging in: Passwords don't match`);
         next(
           new AppError(
             `Error logging in: Incorrect passowrd. Please try again.`,
@@ -118,6 +124,16 @@ async function auth(req, res, next) {
   });
 }
 
+async function checkUpdatedPassword(req, res, next) {
+  console.log(req.body);
+  if (req.body.newPassword) {
+    req.body.password = req.body.newPassword;
+    checkPasswordsMatch(req, res, next);
+    console.log('PASSWORDS MATCH!');
+    hashPassword(req, res, next);
+  } else next();
+}
+
 module.exports = {
   checkPasswordsMatch,
   checkNewUser,
@@ -125,4 +141,6 @@ module.exports = {
   checkUserExists,
   checkPassword,
   auth,
+  checkOldPassword,
+  checkUpdatedPassword,
 };

@@ -8,7 +8,11 @@ const petSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'A pet must have a name'],
-    unique: false,
+  },
+  age: {
+    type: Number,
+    required: [true, 'A pet must have an age'],
+    default: 2,
   },
   picture: {
     type: String,
