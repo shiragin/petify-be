@@ -51,7 +51,6 @@ function sendErrorProd(err, res) {
 }
 
 module.exports = (err, req, res, next) => {
-  console.log(err);
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 
@@ -59,9 +58,10 @@ module.exports = (err, req, res, next) => {
   //   console.log('ERRRRORRRRR');
   //   sendErrorDev(err, res);
   // } else if (process.env.NODE_ENV === 'production') {
-  console.log('ERR', err);
+
   let error = JSON.stringify(err);
   error = JSON.parse(error);
+  error.message = error.message || err.message;
 
   if (error.name === 'CastError') error = handleCastErrorDB(error);
 

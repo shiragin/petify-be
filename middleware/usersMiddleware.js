@@ -31,22 +31,17 @@ const hashPassword = (req, res, next) => {
   const saltRounds = 10;
   bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
     if (err) {
-      // res.status(500).send(err);
       next(new AppError(err, 500));
       return;
     }
-
     req.body.password = hash;
-    next();
   });
+  next();
 };
 
 async function checkUserExists(req, res, next) {
   const user = await getAllUsersData({ email: req.body.email });
   if (user.length === 0) {
-    // res
-    //   .status(400)
-    //   .send(`Error signing up: User ${req.body.email} doesn't exists`);
     next(
       new AppError(
         `Error signing up: User ${req.body.email} doesn't exists`,
@@ -57,20 +52,6 @@ async function checkUserExists(req, res, next) {
   }
   req.body.user = user[0];
   next();
-}
-
-async function checkOldPassword(req, res, next) {
-  const user = await getUserDataById({ _id: req.body._id });
-  const { password } = req.body;
-  if (user.password === password) next();
-  else {
-    next(
-      new AppError(
-        `Error logging in: Incorrect passowrd. Please try again.`,
-        500
-      )
-    );
-  }
 }
 
 async function checkPassword(req, res, next) {
@@ -104,6 +85,69 @@ async function checkPassword(req, res, next) {
   }
 }
 
+async function checkOldPassword(req, res, next) {
+  const user = await getUserDataById({ _id: req.body._id });
+  console.log('USER', user);
+  console.log('OLD PASSWORD', req.body.oldPassword);
+  if (req.body.oldPassword) {
+    bcrypt.compare(req.body.oldPassword, user.password, (err, result) => {
+      if (err) {
+        next(new AppError(`Error changing passwords: ${err}`, 500));
+        return;
+      }
+      if (!result) {
+        next(
+          new AppError(
+            `Error changing passwords: Incorrect passowrd. Please try again.`,
+            500
+          )
+        );
+        return;
+      }
+      console.log('PASSWORDS MATCH');
+      next();
+    });
+  } else {
+    const { password } = req.body;
+    if (user.password === password) next();
+    else {
+      next(
+        new AppError(
+          `Error logging in: Incorrect passowrd. Please try again.`,
+          500
+        )
+      );
+    }
+  }
+}
+
+async function checkUpdatedPassword(req, res, next) {
+  console.log('HAAAAA', req.body);
+  if (req.body.newPassword) {
+    if (req.body.newPassword === req.body.passwordConfirm) {
+      req.body.password = req.body.newPassword;
+      console.log('PASSWORD', req.body.password);
+      const saltRounds = 10;
+      bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
+        if (err) {
+          next(new AppError(err, 500));
+          return;
+        }
+        req.body.password = hash;
+        console.log('HASH', req.body.password);
+        next();
+      });
+    } else {
+      next(
+        new AppError(
+          `Error updating profile: Passowrds don't match. Please try again.`,
+          500
+        )
+      );
+    }
+  } else next();
+}
+
 async function auth(req, res, next) {
   if (!req.headers.authorization) {
     res.status(401).send('Authorization headers required');
@@ -118,20 +162,9 @@ async function auth(req, res, next) {
     }
     if (decoded) {
       req.body.userId = decoded.id;
-      console.log(req.body);
       next();
     }
   });
-}
-
-async function checkUpdatedPassword(req, res, next) {
-  console.log(req.body);
-  if (req.body.newPassword) {
-    req.body.password = req.body.newPassword;
-    checkPasswordsMatch(req, res, next);
-    console.log('PASSWORDS MATCH!');
-    hashPassword(req, res, next);
-  } else next();
 }
 
 module.exports = {

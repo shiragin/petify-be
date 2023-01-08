@@ -34,6 +34,7 @@ async function updateUserData(id, body) {
       new: true,
       runValidators: true,
     });
+    console.log('NEWUSER', newUser);
     return newUser;
   } catch (err) {
     console.error(err);
