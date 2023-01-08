@@ -41,6 +41,7 @@ const hashPassword = (req, res, next) => {
 
 async function checkUserExists(req, res, next) {
   const user = await getAllUsersData({ email: req.body.email });
+  console.log('USER', user);
   if (user.length === 0) {
     next(
       new AppError(
@@ -56,13 +57,16 @@ async function checkUserExists(req, res, next) {
 
 async function checkPassword(req, res, next) {
   const { password, user } = req.body;
+  console.log(password, user.password);
   try {
     bcrypt.compare(password, user.password, (err, result) => {
       if (err) {
+        console.log('ERR');
         next(new AppError(`Error logging in: ${err}`, 500));
         return;
       }
       if (!result) {
+        console.log('NO RESULT');
         next(
           new AppError(
             `Error logging in: Incorrect passowrd. Please try again.`,
@@ -74,9 +78,11 @@ async function checkPassword(req, res, next) {
       const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
         expiresIn: '2h',
       });
+      console.log('TOKEN', token);
       const { exp } = jwt.decode(token);
       req.body.token = token;
       req.body.exp = exp * 1000;
+      console.log(exp);
       next();
     });
   } catch (err) {

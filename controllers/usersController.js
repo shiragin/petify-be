@@ -79,7 +79,7 @@ async function createUser(req, res, next) {
 async function updateUser(req, res, next) {
   console.log('BODY', req.body);
   catchAsync(async function (req, res, next) {
-    const user = await updateUserData(req.body._id, req.body);
+    const user = await updateUserData(req.body._id, req.body, next);
     if (!user) {
       return next(new AppError('No user found with that ID', 404));
     }

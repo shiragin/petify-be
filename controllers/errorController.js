@@ -6,8 +6,14 @@ function handleCastErrorDB(err) {
 }
 
 function handleDuplicateFieldsDB(err) {
-  const { name } = err.keyValue;
-  const message = `Duplicate field value ${name}. Please use another value.`;
+  let message = '';
+  console.log('HAHA', err);
+  const { keyValue } = err;
+  if (keyValue.email) {
+    message = `User with the email ${keyValue.email} already exists. Please choose another email.`;
+  } else {
+    message = `Duplicate field value. Please use another value.`;
+  }
   return new AppError(message, 400);
 }
 
@@ -54,6 +60,10 @@ module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
 
+  console.log('ERR', err);
+  // console.log('REQ', req);
+  console.log('RES', res);
+
   // if (process.env.NODE_ENV === 'development') {
   //   console.log('ERRRRORRRRR');
   //   sendErrorDev(err, res);
@@ -62,6 +72,8 @@ module.exports = (err, req, res, next) => {
   let error = JSON.stringify(err);
   error = JSON.parse(error);
   error.message = error.message || err.message;
+
+  console.log('ERROR', error);
 
   if (error.name === 'CastError') error = handleCastErrorDB(error);
 
