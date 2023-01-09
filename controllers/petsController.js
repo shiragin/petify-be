@@ -37,7 +37,6 @@ async function getPet(req, res, next) {
   catchAsync(async function (req, res, next) {
     const params = req.params.id.split(',');
     const pet = await getPetData(params);
-    console.log(pet);
     if (!pet.length) {
       return next(new AppError('No pet found with that ID', 404));
     }

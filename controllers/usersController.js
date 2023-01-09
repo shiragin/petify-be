@@ -23,8 +23,6 @@ async function getAllUsers(req, res, next) {
 
     // Call modal
     const users = await getAllUsersData(features.query);
-    console.log(users);
-    console.log(typeof users);
 
     // SEND RESPONSE
     res.status(200).json({
@@ -53,9 +51,12 @@ async function getUser(req, res, next) {
 async function getUserByEmail(req, res, next) {
   catchAsync(async function (req, res, next) {
     const { user, token, exp } = req.body;
+    res.cookie('token', token, { maxAge: exp, httpOnly: true });
     if (!user) {
       return next(new AppError('No user found with that ID', 404));
     }
+    console.log(res);
+    console.log(token, exp);
     res.status(200).json({
       ok: true,
       requestedAt: req.requestTime,
@@ -77,7 +78,6 @@ async function createUser(req, res, next) {
 }
 
 async function updateUser(req, res, next) {
-  console.log('BODY', req.body);
   catchAsync(async function (req, res, next) {
     const user = await updateUserData(req.body._id, req.body, next);
     if (!user) {

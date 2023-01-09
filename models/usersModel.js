@@ -20,12 +20,7 @@ async function getUserDataById(id, next) {
 }
 
 async function createUserData(body) {
-  try {
-    const newUser = await User.create(body);
-    return newUser;
-  } catch (err) {
-    console.error(err);
-  }
+  return User.create(body);
 }
 
 async function updateUserData(id, body) {

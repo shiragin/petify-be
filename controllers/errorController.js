@@ -7,7 +7,6 @@ function handleCastErrorDB(err) {
 
 function handleDuplicateFieldsDB(err) {
   let message = '';
-  console.log('HAHA', err);
   const { keyValue } = err;
   if (keyValue.email) {
     message = `User with the email ${keyValue.email} already exists. Please choose another email.`;
@@ -18,10 +17,8 @@ function handleDuplicateFieldsDB(err) {
 }
 
 function handleValidationErrorDB(err) {
-  console.log('WOW', err);
   const errors = Object.values(err.errors).map((el) => el.message);
   const message = `Invalid input data. ${errors.join('. ')}`;
-  console.log('MESSAGE', message);
   return new AppError(message, 400);
 }
 
@@ -59,10 +56,6 @@ function sendErrorProd(err, res) {
 module.exports = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
-
-  console.log('ERR', err);
-  // console.log('REQ', req);
-  console.log('RES', res);
 
   // if (process.env.NODE_ENV === 'development') {
   //   console.log('ERRRRORRRRR');
