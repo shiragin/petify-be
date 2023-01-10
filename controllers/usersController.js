@@ -1,4 +1,4 @@
-// const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const User = require('../schemas/usersSchema');
 const APIFeatures = require('../utils/apiFeatures');
 const {
@@ -48,19 +48,17 @@ async function getUser(req, res, next) {
   })(req, res, next);
 }
 
-async function getUserByEmail(req, res, next) {
+async function loginUser(req, res, next) {
   catchAsync(async function (req, res, next) {
     const { user, token, exp } = req.body;
     res.cookie('token', token, { maxAge: exp, httpOnly: true });
     if (!user) {
       return next(new AppError('No user found with that ID', 404));
     }
-    console.log(res);
-    console.log(token, exp);
     res.status(200).json({
       ok: true,
       requestedAt: req.requestTime,
-      data: { token, user, exp },
+      data: { token, userId: user._id, exp },
     });
   })(req, res, next);
 }
@@ -68,12 +66,20 @@ async function getUserByEmail(req, res, next) {
 async function createUser(req, res, next) {
   catchAsync(async function (req, res, next) {
     const newUser = await createUserData(req.body);
-    res.status(201).json({
-      ok: true,
-      data: {
-        user: newUser,
-      },
-    });
+    if (newUser) {
+      const token = jwt.sign({ id: newUser._id }, process.env.TOKEN_SECRET, {
+        expiresIn: '2h',
+      });
+      const { exp } = jwt.decode(token);
+      res.status(201).json({
+        ok: true,
+        data: {
+          userId: newUser._id,
+          token,
+          exp,
+        },
+      });
+    }
   })(req, res, next);
 }
 
@@ -133,7 +139,7 @@ module.exports = {
   createUser,
   updateUser,
   getUser,
-  getUserByEmail,
+  loginUser,
   editSavedPets,
   editOwnedPets,
 };

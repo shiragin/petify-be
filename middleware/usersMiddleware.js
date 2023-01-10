@@ -30,17 +30,15 @@ async function checkNewUser(req, res, next) {
   next();
 }
 
-const hashPassword = (req, res, next) => {
+async function hashPassword(req, res, next) {
   const saltRounds = 10;
-  bcrypt.hash(req.body.password, saltRounds, (err, hash) => {
-    if (err) {
-      next(new AppError(err, 500));
-      return;
-    }
-    req.body.password = hash;
-  });
-  next();
-};
+  try {
+    req.body.password = await bcrypt.hash(req.body.password, saltRounds);
+    next();
+  } catch (err) {
+    next(new AppError(err, 500));
+  }
+}
 
 async function checkUserExists(req, res, next) {
   const user = await getUserDataByEmail({ email: req.body.email });
@@ -59,7 +57,6 @@ async function checkUserExists(req, res, next) {
 
 async function checkPassword(req, res, next) {
   const { password, user } = req.body;
-  console.log(password, user);
   try {
     bcrypt.compare(password, user.password, (err, result) => {
       if (err) {
@@ -78,7 +75,6 @@ async function checkPassword(req, res, next) {
       const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
         expiresIn: '2h',
       });
-      console.log(token);
       const { exp } = jwt.decode(token);
       req.body.token = token;
       req.body.exp = exp * 1000;

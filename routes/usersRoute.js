@@ -3,7 +3,7 @@ const {
   getAllUsers,
   createUser,
   getUser,
-  getUserByEmail,
+  loginUser,
   updateUser,
 } = require('../controllers/usersController');
 
@@ -26,7 +26,7 @@ router
   .route('/signup')
   .post(checkPasswordsMatch, checkNewUser, hashPassword, createUser);
 
-router.route('/login').post(checkUserExists, checkPassword, getUserByEmail);
+router.route('/login').post(checkUserExists, checkPassword, loginUser);
 
 router
   .route('/:id')
