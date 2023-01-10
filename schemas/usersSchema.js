@@ -26,10 +26,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, 'A user must have a password'],
   },
-  passwordConfirm: {
-    type: String,
-    required: [true, 'A user must have a password confirmation'],
-  },
+  // passwordConfirm: {
+  //   type: String,
+  //   required: [true, 'A user must have a password confirmation'],
+  // },
   bio: {
     type: String,
   },

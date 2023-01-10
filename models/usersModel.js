@@ -1,22 +1,15 @@
 const User = require('../schemas/usersSchema');
 
 async function getAllUsersData(query) {
-  try {
-    const usersList = await User.find(query);
-    return usersList;
-  } catch (err) {
-    console.error(err);
-  }
+  return await User.find(query, { password: 0, passwordConfirm: 0 });
 }
-async function getUserDataById(id, next) {
-  try {
-    const usersList = await User.findById(id);
-    return usersList;
-  } catch (err) {
-    console.error(err);
-    err.statusCode = 500;
-    next(err);
-  }
+
+async function getUserDataById(id) {
+  return await User.findById(id);
+}
+
+async function getUserDataByEmail(email) {
+  return await User.find(email);
 }
 
 async function createUserData(body) {
@@ -49,6 +42,7 @@ async function editSavedPetsData(id, body) {
 module.exports = {
   getAllUsersData,
   getUserDataById,
+  getUserDataByEmail,
   createUserData,
   updateUserData,
   editSavedPetsData,

@@ -1,6 +1,10 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { getAllUsersData, getUserDataById } = require('../models/usersModel');
+const {
+  // getAllUsersData,
+  getUserDataById,
+  getUserDataByEmail,
+} = require('../models/usersModel');
 const AppError = require('../utils/appError');
 
 function checkPasswordsMatch(req, res, next) {
@@ -13,7 +17,7 @@ function checkPasswordsMatch(req, res, next) {
 }
 
 async function checkNewUser(req, res, next) {
-  const user = await getAllUsersData({ email: req.body.email });
+  const user = await getUserDataByEmail({ email: req.body.email });
   if (user.length !== 0) {
     next(
       new AppError(
@@ -39,7 +43,7 @@ const hashPassword = (req, res, next) => {
 };
 
 async function checkUserExists(req, res, next) {
-  const user = await getAllUsersData({ email: req.body.email });
+  const user = await getUserDataByEmail({ email: req.body.email });
   if (user.length === 0) {
     next(
       new AppError(
@@ -55,6 +59,7 @@ async function checkUserExists(req, res, next) {
 
 async function checkPassword(req, res, next) {
   const { password, user } = req.body;
+  console.log(password, user);
   try {
     bcrypt.compare(password, user.password, (err, result) => {
       if (err) {
@@ -73,6 +78,7 @@ async function checkPassword(req, res, next) {
       const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
         expiresIn: '2h',
       });
+      console.log(token);
       const { exp } = jwt.decode(token);
       req.body.token = token;
       req.body.exp = exp * 1000;
