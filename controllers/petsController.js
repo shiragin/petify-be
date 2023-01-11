@@ -50,6 +50,7 @@ async function getPet(req, res, next) {
 
 async function createPet(req, res, next) {
   catchAsync(async function (req, res, next) {
+    if (req.body.colour) req.body.colour = req.body.colour.split(',');
     const newPet = await createPetData(req.body);
     res.status(201).json({
       ok: true,
@@ -63,7 +64,7 @@ async function createPet(req, res, next) {
 async function updatePet(req, res, next) {
   catchAsync(async function (req, res, next) {
     if (req.body.colour) req.body.colour = req.body.colour.split(',');
-    if (req.body.dietry) req.body.dietry = req.body.dietry.split(',');
+    // if (req.body.dietry) req.body.dietry = req.body.dietry.split(',');
     const pet = await updatePetData(req.params.id, req.body);
     if (!pet) {
       return next(new AppError('No pet found with that ID', 404));

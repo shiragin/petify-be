@@ -9,6 +9,15 @@ const AppError = require('../utils/appError');
 
 function checkPasswordsMatch(req, res, next) {
   const { password, passwordConfirm } = req.body;
+  if (password.length < 8) {
+    next(
+      new AppError(
+        `Error signing up: Your password must have at least 8 characters`,
+        400
+      )
+    );
+    return;
+  }
   if (password !== passwordConfirm) {
     next(new AppError(`Error signing up: Passwords don't match`, 400));
     return;
@@ -120,6 +129,15 @@ async function checkOldPassword(req, res, next) {
 
 async function checkUpdatedPassword(req, res, next) {
   if (req.body.newPassword) {
+    if (req.body.newPassword.length < 8) {
+      next(
+        new AppError(
+          `Error signing up: Your password must have at least 8 characters`,
+          400
+        )
+      );
+      return;
+    }
     if (req.body.newPassword === req.body.passwordConfirm) {
       req.body.password = req.body.newPassword;
       const saltRounds = 10;
@@ -147,7 +165,6 @@ async function auth(req, res, next) {
     res.status(401).send('Authorization cookies required');
     return;
   }
-  // const token = req.headers.authorization.replace('Bearer ', '');
   jwt.verify(req.cookies.token, process.env.TOKEN_SECRET, (err, decoded) => {
     if (err) {
       res.status(401).send('Unauthorized');

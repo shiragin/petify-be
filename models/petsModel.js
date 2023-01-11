@@ -1,40 +1,25 @@
+/* eslint-disable no-lonely-if */
+/* eslint-disable no-restricted-syntax */
 const Pet = require('../schemas/petsSchema');
 // const AppError = require('../utils/appError');
 
-async function getAllPetsData(query) {
-  try {
-    const petsList = await Pet.find(query);
-    return petsList;
-  } catch (err) {
-    console.error(err);
-  }
+function getAllPetsData(query) {
+  return Pet.find(query);
 }
 
-async function getPetData(params, next) {
-  try {
-    const petsList = Pet.find({ _id: { $in: params } });
-    return petsList;
-  } catch (err) {
-    console.error(err);
-    err.statusCode = 500;
-    next(err);
-  }
+function getPetData(params, next) {
+  return Pet.find({ _id: { $in: params } });
 }
 
-async function getRandomPetsData() {
-  try {
-    const petsList = await Pet.aggregate([
-      {
-        $match: { adoptionStatus: 'Available' },
-      },
-      {
-        $sample: { size: 4 },
-      },
-    ]);
-    return petsList;
-  } catch (err) {
-    console.error(err);
-  }
+function getRandomPetsData() {
+  return Pet.aggregate([
+    {
+      $match: { adoptionStatus: 'Available' },
+    },
+    {
+      $sample: { size: 4 },
+    },
+  ]);
 }
 
 function createPetData(body) {
@@ -52,12 +37,8 @@ function updatePetData(id, body) {
   });
 }
 
-async function deletePetData(id) {
-  try {
-    return await Pet.findByIdAndDelete(id);
-  } catch (err) {
-    console.error(err);
-  }
+function deletePetData(id) {
+  return Pet.findByIdAndDelete(id);
 }
 
 module.exports = {
