@@ -44,7 +44,15 @@ const userSchema = new mongoose.Schema({
   fosteredPets: {
     type: [String],
   },
+  lastLogin: {
+    type: Date,
+  },
 });
+
+// userSchema.pre('save', function (next) {
+//   this.lastLoggedIn = Date.now();
+//   next();
+// });
 
 const User = mongoose.model('User', userSchema);
 

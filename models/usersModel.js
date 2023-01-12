@@ -5,7 +5,7 @@ function getAllUsersData(query) {
 }
 
 function getUserDataById(id) {
-  return User.findById(id);
+  return User.findById(id, { password: 0, passwordConfirm: 0 });
 }
 
 function getUserDataByEmail(email) {
@@ -20,7 +20,7 @@ function updateUserData(id, body) {
   return User.findByIdAndUpdate(id, body, {
     new: true,
     runValidators: true,
-  });
+  }).select({ password: 0 });
 }
 
 function editSavedPetsData(id, body) {
@@ -31,7 +31,7 @@ function editSavedPetsData(id, body) {
       new: true,
       runValidators: true,
     }
-  );
+  ).select({ password: 0 });
 }
 
 module.exports = {

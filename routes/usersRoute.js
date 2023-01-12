@@ -16,6 +16,7 @@ const {
   auth,
   checkOldPassword,
   checkUpdatedPassword,
+  setLastLogin,
 } = require('../middleware/usersMiddleware');
 
 const router = express.Router();
@@ -26,7 +27,9 @@ router
   .route('/signup')
   .post(checkPasswordsMatch, checkNewUser, hashPassword, createUser);
 
-router.route('/login').post(checkUserExists, checkPassword, loginUser);
+router
+  .route('/login')
+  .post(checkUserExists, checkPassword, setLastLogin, loginUser);
 
 router
   .route('/:id')

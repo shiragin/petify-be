@@ -1,9 +1,9 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const {
-  // getAllUsersData,
   getUserDataById,
   getUserDataByEmail,
+  updateUserData,
 } = require('../models/usersModel');
 const AppError = require('../utils/appError');
 
@@ -92,6 +92,15 @@ async function checkPassword(req, res, next) {
   } catch (err) {
     next(new AppError(`Error logging in: ${err}`, 500));
   }
+}
+
+async function setLastLogin(req, res, next) {
+  req.body.user.lastLogin = Date.now();
+  const updatedUser = await updateUserData(req.body.user._id, {
+    lastLogin: req.body.user.lastLogin,
+  });
+  console.log(updatedUser);
+  next();
 }
 
 async function checkOldPassword(req, res, next) {
@@ -186,4 +195,5 @@ module.exports = {
   auth,
   checkOldPassword,
   checkUpdatedPassword,
+  setLastLogin,
 };
