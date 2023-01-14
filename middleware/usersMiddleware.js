@@ -96,6 +96,7 @@ async function checkPassword(req, res, next) {
 
 async function setLastLogin(req, res, next) {
   req.body.user.lastLogin = Date.now();
+  console.log(req.body.user.lastLogin);
   const updatedUser = await updateUserData(req.body.user._id, {
     lastLogin: req.body.user.lastLogin,
   });

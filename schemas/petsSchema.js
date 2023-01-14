@@ -68,7 +68,7 @@ const petSchema = new mongoose.Schema({
   dietry: { type: String },
   addedAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
   owner: {
     type: String,
@@ -80,6 +80,13 @@ const petSchema = new mongoose.Schema({
       message: 'Please choose one of the following sizes',
     },
   },
+});
+
+petSchema.pre('save', function (next) {
+  if (!this.addedAt) {
+    this.addedAt = new Date();
+  }
+  next();
 });
 
 petSchema.pre('save', function (next) {

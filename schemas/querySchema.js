@@ -24,12 +24,7 @@ const querySchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please tell us the topic of your query'],
     enum: {
-      values: [
-        'Adoption & fostering',
-        'Returning a pet',
-        'Technical issues',
-        'General questions',
-      ],
+      values: ['Adoption', 'Returning', 'Technical', 'General'],
       message:
         'Please choose one of the following topics - Adoption & fostering, Returning a pet, Technical issues, General questions',
     },
@@ -40,14 +35,26 @@ const querySchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
+  },
+  replied: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
   reply: {
     type: String,
   },
-  RepliedAt: {
+  repliedAt: {
     type: Date,
   },
+});
+
+querySchema.pre('save', function (next) {
+  if (!this.createdAt) {
+    this.createdAt = new Date();
+  }
+  next();
 });
 
 const Query = mongoose.model('Query', querySchema);
