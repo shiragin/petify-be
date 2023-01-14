@@ -23,11 +23,7 @@ function getRandomPetsData() {
 }
 
 function createPetData(body) {
-  try {
-    return Pet.create(body);
-  } catch (err) {
-    console.error(err);
-  }
+  return Pet.create(body);
 }
 
 function updatePetData(id, body) {

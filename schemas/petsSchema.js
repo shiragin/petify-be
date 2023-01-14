@@ -5,39 +5,50 @@ const mongoose = require('mongoose');
 const petSchema = new mongoose.Schema({
   type: {
     type: String,
-    required: [true, 'A pet must have a type'],
+    required: [true, 'Please specify a pet type (cat or dog)'],
+    enum: {
+      values: ['Cat', 'Dog'],
+      message: 'Please choose one of the following types',
+    },
   },
   name: {
     type: String,
-    required: [true, 'A pet must have a name'],
+    required: [true, 'Please specify a pet name'],
     trim: true,
     maxlength: [16, 'A pet name cannot have more than 16 characters'],
     minlength: [2, 'A pet name must have at least 2 characters'],
   },
   age: {
     type: Number,
-    required: [true, 'A pet must have an age'],
+    required: [true, 'Please specify a pet age'],
     default: 2,
   },
   picture: {
     type: String,
-    required: [true, 'A pet must have am image'],
+    required: [true, 'Please add a pet image'],
   },
   adoptionStatus: {
     type: String,
-    required: [true, 'A pet must have a status'],
+    required: [
+      true,
+      `Please specify the pet's adoption status (available, fostered or adopted)`,
+    ],
+    enum: {
+      values: ['Available', 'Fostered', 'Adopted'],
+      message: 'Please choose one of the following statuses',
+    },
   },
   height: {
     type: Number,
-    required: [true, 'A pet must have a height'],
+    required: [true, 'Please specify a pet height'],
   },
   weight: {
     type: Number,
-    required: [true, 'A pet must have a weight'],
+    required: [true, 'Please specify a pet weight'],
   },
   colour: {
     type: [String],
-    required: [true, 'A pet must have a colour'],
+    required: [true, 'Please specify a pet colour (can have multiple colours)'],
   },
   bio: {
     type: String,
@@ -45,11 +56,11 @@ const petSchema = new mongoose.Schema({
   },
   hypoallergenic: {
     type: Boolean,
-    required: [true, 'A pet must have a hypoallergenic spec'],
+    required: [true, 'Please specify aif the pet is hypoallergenic'],
   },
   breed: {
     type: String,
-    required: [true, 'A pet must have a breed'],
+    required: [true, 'Please specify a pet breed'],
     trim: true,
     maxlength: [40, 'A pet breed cannot have more than 40 characters'],
     minlength: [2, 'A pet breed must have at least 2 characters'],
@@ -64,30 +75,12 @@ const petSchema = new mongoose.Schema({
   },
   size: {
     type: String,
+    enum: {
+      values: ['Big', 'Medium', 'Small'],
+      message: 'Please choose one of the following sizes',
+    },
   },
 });
-
-// petSchema.set('toJSON', { virtuals: true });
-
-// petSchema.virtual('size').get(function () {
-//   if (this.type === 'Cat') {
-//     if (this.weight < 4) return 'Small';
-//     else if (this.weight > 4 && this.weight <= 7) return 'Medium';
-//     else return 'Large';
-//   } else if (this.type === 'Dog') {
-//     if (this.weight < 20) {
-//       return 'Small';
-//     } else if (this.weight >= 20 && this.weight <= 40) {
-//       return 'Medium';
-//     } else {
-//       return 'Large';
-//     }
-//   }
-// });
-
-// petSchema.virtual('age_months').get(function () {
-//   return this.age * 12;
-// });
 
 petSchema.pre('save', function (next) {
   if (this.type === 'Cat') {

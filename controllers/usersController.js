@@ -71,12 +71,13 @@ async function createUser(req, res, next) {
         expiresIn: '2h',
       });
       const { exp } = jwt.decode(token);
+      res.cookie('token', token, { maxAge: exp * 1000, httpOnly: true });
       res.status(201).json({
         ok: true,
         data: {
           userId: newUser._id,
           token,
-          exp,
+          exp: exp * 1000,
         },
       });
     }
@@ -126,6 +127,7 @@ async function editOwnedPets(req, res, next) {
     if (!pet) {
       return next(new AppError('No pet found with that ID', 404));
     }
+    console.log(pet);
     res.status(200).json({
       ok: true,
       requestedAt: req.requestTime,

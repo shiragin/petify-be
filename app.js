@@ -8,6 +8,7 @@ const globalErrorHandler = require('./controllers/errorController');
 
 const usersRoute = require('./routes/usersRoute');
 const petsRoute = require('./routes/petsRoute');
+const queriesRoute = require('./routes/queriesRoute');
 
 const app = express();
 app.use(express.static(`${__dirname}/public`));
@@ -24,6 +25,7 @@ app.use((req, res, next) => {
 
 app.use('/users', usersRoute);
 app.use('/pets', petsRoute);
+app.use('/queries', queriesRoute);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
@@ -31,10 +33,5 @@ app.all('*', (req, res, next) => {
 
 // Global error middleware
 app.use(globalErrorHandler);
-
-// app.use((err, req, res, next) => {
-//   console.error(err);
-//   res.status(err.statusCode).send(err.message);
-// });
 
 module.exports = app;

@@ -1,30 +1,39 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
-    required: [true, 'A user must have a first name'],
-    maxlength: [16, 'A first name have more than 16 characters'],
-    minlength: [2, 'A first name must have at least 2 characters'],
+    required: [true, 'Please enter your first name'],
+    maxlength: [16, `Your first name can't more than 16 characters`],
+    minlength: [2, 'Your first name must have at least 2 characters'],
   },
   lastName: {
     type: String,
-    required: [true, 'A user must have a last name'],
-    maxlength: [16, 'A last name have more than 16 characters'],
-    minlength: [2, 'A last name must have at least 2 characters'],
+    required: [true, 'Please enter your last name'],
+    maxlength: [16, `Your last name can't more than 16 characters`],
+    minlength: [2, 'Your last name must have at least 2 characters'],
   },
   email: {
     type: String,
-    required: [true, 'A user must have an email'],
+    required: [true, 'Please enter your email'],
+    lowercase: true,
     unique: [true, 'Email already exists'],
+    validate: [validator.isEmail, 'Please provide a valid email'],
   },
   phoneNumber: {
     type: String,
-    required: [true, 'A user must have a phone number'],
+    required: [true, 'Please enter your phone number'],
+    validate: {
+      validator: function (value) {
+        return validator.isMobilePhone(value, 'he-IL');
+      },
+      message: 'Please provide a valid Israeli mobile number',
+    },
   },
   password: {
     type: String,
-    required: [true, 'A user must have a password'],
+    required: [true, 'Please enter your password'],
     minlength: [8, 'Your password must have at least 8 characters'],
   },
   bio: {

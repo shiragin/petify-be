@@ -13,7 +13,13 @@ function getUserDataByEmail(email) {
 }
 
 function createUserData(body) {
-  return User.create(body);
+  return User.create({
+    firstName: body.firstName,
+    lastName: body.lastName,
+    email: body.email,
+    phoneNumber: body.phoneNumber,
+    password: body.password,
+  });
 }
 
 function updateUserData(id, body) {
