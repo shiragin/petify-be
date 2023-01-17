@@ -30,7 +30,7 @@ const querySchema = new mongoose.Schema({
     },
   },
   message: {
-    type: 'String',
+    type: String,
     required: [true, 'Please enter your message'],
   },
   createdAt: {

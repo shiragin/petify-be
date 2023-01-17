@@ -26,9 +26,8 @@ async function getAllPets(req, res, next) {
     // SEND RESPONSE
     res.status(200).json({
       ok: true,
-      requestedAt: req.requestTime,
       results: pets.length,
-      data: { pets },
+      pets,
     });
   })(req, res, next);
 }
@@ -43,7 +42,7 @@ async function getPet(req, res, next) {
     res.status(200).json({
       ok: true,
       requestedAt: req.requestTime,
-      data: { pet },
+      pet,
     });
   })(req, res, next);
 }
@@ -54,9 +53,7 @@ async function createPet(req, res, next) {
     const newPet = await createPetData(req.body);
     res.status(201).json({
       ok: true,
-      data: {
-        pet: newPet,
-      },
+      pet: newPet,
     });
   })(req, res, next);
 }
@@ -71,8 +68,7 @@ async function updatePet(req, res, next) {
     }
     res.status(200).json({
       ok: true,
-      requestedAt: req.requestTime,
-      data: { pet },
+      pet,
     });
   })(req, res, next);
 }
@@ -82,8 +78,6 @@ async function deletePet(req, res, next) {
     const pet = await deletePetData(req.params.id);
     res.status(204).json({
       ok: true,
-      requestedAt: req.requestTime,
-      data: null,
     });
     if (!pet) {
       return next(new AppError('No pet found with that ID', 404));
@@ -96,9 +90,8 @@ async function getRandomPets(req, res, next) {
     const pets = await getRandomPetsData();
     res.status(200).json({
       ok: true,
-      requestedAt: req.requestTime,
       results: pets.length,
-      data: { pets },
+      pets,
     });
   })(req, res, next);
 }
@@ -115,14 +108,11 @@ async function getPetsByUser(req, res, next) {
     const adoptedPetsList = await getPetData(adoptedPets);
     res.status(200).json({
       ok: true,
-      requestedAt: req.requestTime,
       results:
         savedPetsList.length + fosteredPetsList.length + adoptedPetsList.length,
-      data: {
-        savedPets: savedPetsList,
-        fosteredPets: fosteredPetsList,
-        adoptedPets: adoptedPetsList,
-      },
+      savedPets: savedPetsList,
+      fosteredPets: fosteredPetsList,
+      adoptedPets: adoptedPetsList,
     });
   })(req, res, next);
 }

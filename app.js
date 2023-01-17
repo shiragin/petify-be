@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
 const AppError = require('./utils/appError');
-const globalErrorHandler = require('./controllers/errorController');
+const globalErrorHandler = require('./controllers/errorsController');
 
 const usersRoute = require('./routes/usersRoute');
 const petsRoute = require('./routes/petsRoute');

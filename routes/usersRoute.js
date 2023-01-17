@@ -17,11 +17,12 @@ const {
   checkOldPassword,
   checkUpdatedPassword,
   setLastLogin,
+  checkIsAdmin,
 } = require('../middleware/usersMiddleware');
 
 const router = express.Router();
 
-router.route('/').get(getAllUsers);
+router.route('/').get(auth, checkIsAdmin, getAllUsers);
 
 router
   .route('/signup')

@@ -15,11 +15,6 @@ class APIFeatures {
     if (queryObj.colour) {
       queryObj.colour = { $regex: `${queryObj.colour}` };
     }
-    // if (queryObj.size) {
-    //   if (queryObj.size === 'Small') queryObj.weight = { lt: 10 };
-    //   if (queryObj.size === 'Medium') queryObj.weight = { gte: 10, lt: 20 };
-    //   if (queryObj.size === 'Big') queryObj.weight = { gte: 20 };
-    // }
     if (queryObj.age) {
       if (queryObj.age === 'Young') queryObj.age = { lte: 2 };
       if (queryObj.age === 'Adult') queryObj.age = { gt: 2, lt: 10 };

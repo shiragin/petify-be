@@ -15,7 +15,7 @@ const {
   editOwnedPets,
 } = require('../controllers/usersController');
 
-const { auth } = require('../middleware/usersMiddleware');
+const { auth, checkIsAdmin } = require('../middleware/usersMiddleware');
 
 const { getPictureUrl, upload } = require('../middleware/petsMiddleware');
 
@@ -24,7 +24,7 @@ const router = express.Router();
 router
   .route('/')
   .get(getAllPets)
-  .post(auth, upload.single('picture'), getPictureUrl, createPet);
+  .post(auth, checkIsAdmin, upload.single('picture'), getPictureUrl, createPet);
 
 router.route('/random').get(getRandomPets);
 
@@ -33,8 +33,8 @@ router.route('/user/:id').get(auth, getPetsByUser);
 router
   .route('/:id')
   .get(getPet)
-  .patch(auth, upload.single('picture'), getPictureUrl, updatePet)
-  .delete(auth, deletePet);
+  .patch(auth, checkIsAdmin, upload.single('picture'), getPictureUrl, updatePet)
+  .delete(auth, checkIsAdmin, deletePet);
 
 router.route('/:id/save').post(auth, editSavedPets).delete(auth, editSavedPets);
 

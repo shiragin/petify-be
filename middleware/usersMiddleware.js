@@ -172,19 +172,24 @@ async function checkUpdatedPassword(req, res, next) {
 
 async function auth(req, res, next) {
   if (!req.cookies.token) {
-    res.status(401).send('Authorization cookies required');
-    return;
+    next(new AppError('Authorisation cookies required', 401));
   }
   jwt.verify(req.cookies.token, process.env.TOKEN_SECRET, (err, decoded) => {
     if (err) {
-      res.status(401).send('Unauthorized');
-      return;
+      next(new AppError('Unauthorised', 401));
     }
     if (decoded) {
       req.body.userId = decoded.id;
       next();
     }
   });
+}
+
+async function checkIsAdmin(req, res, next) {
+  const user = await getUserDataById(req.body.userId);
+  if (!user.isAdmin) {
+    next(new AppError(`Unauthorised! User is not an admin.`, 403));
+  } else next();
 }
 
 module.exports = {
@@ -197,4 +202,5 @@ module.exports = {
   checkOldPassword,
   checkUpdatedPassword,
   setLastLogin,
+  checkIsAdmin,
 };

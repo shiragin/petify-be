@@ -27,9 +27,8 @@ async function getAllUsers(req, res, next) {
     // SEND RESPONSE
     res.status(200).json({
       ok: true,
-      requestedAt: req.requestTime,
       results: users.length,
-      data: { users },
+      users,
     });
   })(req, res, next);
 }
@@ -42,8 +41,7 @@ async function getUser(req, res, next) {
     }
     res.status(200).json({
       ok: true,
-      requestedAt: req.requestTime,
-      data: { user },
+      user,
     });
   })(req, res, next);
 }
@@ -57,8 +55,9 @@ async function loginUser(req, res, next) {
     }
     res.status(200).json({
       ok: true,
-      requestedAt: req.requestTime,
-      data: { token, userId: user._id, exp },
+      token,
+      userId: user._id,
+      exp,
     });
   })(req, res, next);
 }
@@ -74,11 +73,9 @@ async function createUser(req, res, next) {
       res.cookie('token', token, { maxAge: exp * 1000, httpOnly: true });
       res.status(201).json({
         ok: true,
-        data: {
-          userId: newUser._id,
-          token,
-          exp: exp * 1000,
-        },
+        userId: newUser._id,
+        token,
+        exp: exp * 1000,
       });
     }
   })(req, res, next);
@@ -93,7 +90,7 @@ async function updateUser(req, res, next) {
     res.status(200).json({
       ok: true,
       requestedAt: req.requestTime,
-      data: { user },
+      user,
     });
   })(req, res, next);
 }
@@ -108,8 +105,7 @@ async function editSavedPets(req, res, next) {
     }
     res.status(200).json({
       ok: true,
-      requestedAt: req.requestTime,
-      data: { user },
+      user,
     });
   })(req, res, next);
 }
@@ -131,7 +127,8 @@ async function editOwnedPets(req, res, next) {
     res.status(200).json({
       ok: true,
       requestedAt: req.requestTime,
-      data: { user, pet },
+      user,
+      pet,
     });
   })(req, res, next);
 }
