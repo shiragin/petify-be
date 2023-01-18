@@ -4,6 +4,7 @@ const {
   getUserDataById,
   getUserDataByEmail,
   updateUserData,
+  getUserDataFullById,
 } = require('../models/usersModel');
 const AppError = require('../utils/appError');
 
@@ -105,8 +106,9 @@ async function setLastLogin(req, res, next) {
 }
 
 async function checkOldPassword(req, res, next) {
-  const user = await getUserDataById({ _id: req.body._id });
-  if (req.body.oldPassword) {
+  console.log(req.body);
+  const user = await getUserDataFullById(req.body._id);
+  if (req.body.newPassword !== '') {
     bcrypt.compare(req.body.oldPassword, user.password, (err, result) => {
       if (err) {
         next(new AppError(`Error changing passwords: ${err}`, 500));
@@ -124,16 +126,17 @@ async function checkOldPassword(req, res, next) {
       next();
     });
   } else {
-    const { password } = req.body;
-    if (user.password === password) next();
-    else {
-      next(
-        new AppError(
-          `Error logging in: Incorrect passowrd. Please try again.`,
-          500
-        )
-      );
-    }
+    next();
+    // const { password } = req.body;
+    // if (user.password === password) next();
+    // else {
+    //   next(
+    //     new AppError(
+    //       `Error logging in: Incorrect passowrd. Please try again.`,
+    //       500
+    //     )
+    //   );
+    // }
   }
 }
 

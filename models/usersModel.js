@@ -8,6 +8,11 @@ function getUserDataById(id) {
   return User.findById(id, { password: 0, passwordConfirm: 0 });
 }
 
+async function getUserDataFullById(id) {
+  const user = await User.findById(id);
+  return user;
+}
+
 function getUserDataByEmail(email) {
   return User.find(email);
 }
@@ -47,4 +52,5 @@ module.exports = {
   createUserData,
   updateUserData,
   editSavedPetsData,
+  getUserDataFullById,
 };
