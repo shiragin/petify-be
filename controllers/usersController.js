@@ -65,6 +65,7 @@ async function loginUser(req, res, next) {
 async function createUser(req, res, next) {
   catchAsync(async function (req, res, next) {
     const newUser = await createUserData(req.body);
+    // move to utility function
     if (newUser) {
       const token = jwt.sign({ id: newUser._id }, process.env.TOKEN_SECRET, {
         expiresIn: '2h',

@@ -108,7 +108,7 @@ async function setLastLogin(req, res, next) {
 async function checkOldPassword(req, res, next) {
   console.log(req.body);
   const user = await getUserDataFullById(req.body._id);
-  if (req.body.newPassword !== '') {
+  if (req.body.newPassword) {
     bcrypt.compare(req.body.oldPassword, user.password, (err, result) => {
       if (err) {
         next(new AppError(`Error changing passwords: ${err}`, 500));
