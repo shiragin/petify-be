@@ -49,7 +49,12 @@ async function getUser(req, res, next) {
 async function loginUser(req, res, next) {
   catchAsync(async function (req, res, next) {
     const { user, token, exp } = req.body;
-    res.cookie('token', token, { maxAge: exp, httpOnly: true });
+    res.cookie('token', token, {
+      maxAge: exp,
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+    });
     if (!user) {
       return next(new AppError('No user found with that ID', 404));
     }
@@ -71,7 +76,13 @@ async function createUser(req, res, next) {
         expiresIn: '2h',
       });
       const { exp } = jwt.decode(token);
-      res.cookie('token', token, { maxAge: exp * 1000, httpOnly: true });
+      res.cookie('token', token, {
+        maxAge: exp * 1000,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        // eslint-disable-next-line no-unneeded-ternary
+        sameSite: process.env.NODE_ENV === 'production' ? true : false,
+      });
       res.status(201).json({
         ok: true,
         userId: newUser._id,
