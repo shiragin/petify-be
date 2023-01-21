@@ -79,9 +79,9 @@ async function createUser(req, res, next) {
       res.cookie('token', token, {
         maxAge: exp * 1000,
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
         // eslint-disable-next-line no-unneeded-ternary
-        sameSite: process.env.NODE_ENV === 'production' ? true : false,
+        secure: process.env.NODE_ENV === 'production' ? true : false,
       });
       res.status(201).json({
         ok: true,
