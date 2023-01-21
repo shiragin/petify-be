@@ -16,7 +16,12 @@ app.use(express.static(`${__dirname}/public`));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ origin: ['http://localhost:3000'], credentials: true }));
+app.use(
+  cors({
+    origin: ['http://localhost:3000', 'https://petify-six.vercel.app'],
+    credentials: true,
+  })
+);
 
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();

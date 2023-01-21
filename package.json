@@ -2,9 +2,9 @@
   "name": "petify",
   "version": "1.0.0",
   "description": "A pet adoption app",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js",
+    "start": "node index.js",
     "start:prod": "NODE_ENV=production nodemon server.js"
   },
   "repository": {
