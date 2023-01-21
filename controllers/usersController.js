@@ -52,11 +52,11 @@ async function loginUser(req, res, next) {
     res.cookie('token', token, {
       maxAge: exp,
       httpOnly: true,
-      // sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-      sameSite: 'none',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      // sameSite: 'none',
       // eslint-disable-next-line no-unneeded-ternary
-      // secure: process.env.NODE_ENV === 'production' ? true : false,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production' ? true : false,
+      // secure: true,
     });
     if (!user) {
       return next(new AppError('No user found with that ID', 404));
